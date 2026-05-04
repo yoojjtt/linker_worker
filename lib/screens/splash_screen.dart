@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_colors.dart';
+import '../theme/app_text_styles.dart';
+import 'login_screen.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -37,7 +41,10 @@ class _SplashScreenState extends State<SplashScreen>
 
     _fadeController.forward().then((_) {
       _progressController.forward().then((_) {
-        // TODO: Navigate to next screen
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
       });
     });
   }
@@ -55,67 +62,34 @@ class _SplashScreenState extends State<SplashScreen>
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFF8F9FC),
-              Color(0xFFE8EAF0),
-            ],
-          ),
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: FadeTransition(
           opacity: _fadeAnimation,
           child: Column(
             children: [
               const Spacer(flex: 3),
-              // Logo
               Image.asset(
                 'assets/images/logo_linker.png',
                 width: 120,
                 height: 120,
               ),
               const SizedBox(height: 20),
-              // LINKER. text
-              const Text(
-                'LINKER.',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF1B2B5A),
-                  letterSpacing: 3,
-                ),
-              ),
+              const Text('LINKER.', style: AppTextStyles.heading1),
               const Spacer(flex: 4),
-              // Korean tagline
-              const Text(
+              Text(
                 '전통적인 신뢰 위에 첨단 기술을 더하다',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF3A4A6B),
-                  letterSpacing: 1,
-                ),
+                style: AppTextStyles.bodyLarge.copyWith(letterSpacing: 1),
               ),
               const SizedBox(height: 8),
-              // English subtitle
-              const Text(
+              Text(
                 'Precision Human Scale Workforce Management',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF8A95AD),
-                  letterSpacing: 0.5,
-                ),
+                style: AppTextStyles.bodySmall.copyWith(letterSpacing: 0.5),
               ),
               const SizedBox(height: 32),
-              // Progress bar
               AnimatedBuilder(
                 animation: _progressAnimation,
                 builder: (context, child) {
-                  final percent =
-                      (_progressAnimation.value * 100).toInt();
+                  final percent = (_progressAnimation.value * 100).toInt();
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 80),
                     child: Column(
@@ -125,9 +99,9 @@ class _SplashScreenState extends State<SplashScreen>
                           child: LinearProgressIndicator(
                             value: _progressAnimation.value,
                             minHeight: 6,
-                            backgroundColor: const Color(0xFFD8DCE6),
+                            backgroundColor: AppColors.divider,
                             valueColor: const AlwaysStoppedAnimation<Color>(
-                              Color(0xFF2B5CE6),
+                              AppColors.primaryBlue,
                             ),
                           ),
                         ),
@@ -137,19 +111,11 @@ class _SplashScreenState extends State<SplashScreen>
                           children: [
                             const Text(
                               'SYSTEM INITIALIZING',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF2B5CE6),
-                                letterSpacing: 1.5,
-                              ),
+                              style: AppTextStyles.caption,
                             ),
                             Text(
                               '$percent%',
-                              style: const TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF2B5CE6),
+                              style: AppTextStyles.caption.copyWith(
                                 letterSpacing: 0.5,
                               ),
                             ),
@@ -168,4 +134,3 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
-
